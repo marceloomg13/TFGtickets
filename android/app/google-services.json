@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "479420035332",
+    "project_id": "booktickets-3dfee",
+    "storage_bucket": "booktickets-3dfee.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:479420035332:android:5a9253a882e3e9a4652051",
+        "android_client_info": {
+          "package_name": "com.example.booktickets"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtRlwVcDqLOu0lPTHvCfL4BX5ACC9TdSE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

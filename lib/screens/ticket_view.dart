@@ -24,11 +24,11 @@ class TicketView extends StatelessWidget {
         child: Column(
           children: [
             /*
-            * Parte Azul del Ticket
+            * Parte anaranjada del Ticket
             * */
             Container(
               decoration: BoxDecoration(
-                color: isColor==null? Color(0xFF526799):Colors.white,
+                color: isColor==null? Color(0xffeab676):Colors.white,
                 borderRadius: BorderRadius.only(topLeft: Radius.circular(AppLayout.getHeight(21)),
                 topRight: Radius.circular(AppLayout.getHeight(21)))
               ),
@@ -72,10 +72,10 @@ class TicketView extends StatelessWidget {
               ),
             ),
             /*
-            * Parte Naranja del Ticket
+            * Parte azul del Ticket
             * */
             Container(
-              color: isColor==null? Styles.orangeColor:Colors.white,
+              color: isColor==null? Color(0xff76b5c5):Colors.white,
               child: Row(
                 children: [
                   SizedBox(
@@ -112,11 +112,11 @@ class TicketView extends StatelessWidget {
                 ],
               )),
               /**
-               * Parte Naranja Bottom
+               * Parte azul Bottom
                */
             Container(
               decoration: BoxDecoration(
-                  color:isColor==null? Styles.orangeColor:Colors.white,
+                  color:isColor==null? Color(0xff76b5c5):Colors.white,
                   borderRadius:  BorderRadius.only(
                       bottomLeft: Radius.circular(isColor==null? AppLayout.getHeight(21):0),
                       bottomRight: Radius.circular(isColor==null? AppLayout.getHeight(21):0))

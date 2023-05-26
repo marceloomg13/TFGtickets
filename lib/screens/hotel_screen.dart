@@ -17,7 +17,7 @@ class HotelScren extends StatelessWidget {
       width: size.width*0.6,
       height: 350,
       decoration: BoxDecoration(
-        color: Styles.primaryColor,
+        color: Color(0xff76b5c5),
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
