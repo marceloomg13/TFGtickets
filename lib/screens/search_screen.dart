@@ -1,17 +1,62 @@
+import 'dart:async';
+
 import 'package:booktickets/utils/app_layout.dart';
 import 'package:booktickets/widgets/icon_text_widget.dart';
 import 'package:booktickets/widgets/ticket_tab.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-
+import 'package:get/get.dart';
+import 'dart:developer' as developer;
+import '../utils/app_info_list.dart';
 import '../utils/app_styles.dart';
 import '../widgets/double_text_widget.dart';
+import '../widgets/my_textfield.dart';
+import 'flight_picker.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({Key? key}) : super(key: key);
 
+
+
+  void findQuery(TextEditingController toController, TextEditingController fromController,context) async {
+    var db = FirebaseFirestore.instance;
+    int ticketIDNumber = 0;
+    for(var i = 0;i<=ticketList.length-1;i++){
+      print(ticketList[i]);
+    }
+    db.collection("Vuelos").where("to.name", isEqualTo: toController.text).where("from.name", isEqualTo: fromController.text).get().then(
+          (querySnapshot) {
+        print("Successfully completed");
+        for (var docSnapshot in querySnapshot.docs) {
+          print('${docSnapshot.id} => ${docSnapshot.data()}');
+          Map<String, dynamic> data = docSnapshot.data();
+          for(var i = 0;i<=ticketList.length-1;i++){
+            print("${data['number']}     ${ticketList[i]['number']}");
+            if(data['number'].toString() == ticketList[i]['number'].toString()){
+
+              ticketIDNumber = i;
+              print("TRUE" + "  "+ticketIDNumber.toString());
+
+              showCupertinoModalPopup(context: context, builder:
+                  (context) => flightPicker(ticketID: ticketIDNumber));
+            }else{
+              print("false");
+            }
+          }
+        }
+      },
+      onError: (e) => print("Error completing: $e"),
+    );
+  }
+
+
+  
   @override
   Widget build(BuildContext context) {
+    final fromController = TextEditingController();
+    final toController = TextEditingController();
     final size = AppLayout.getSize(context);
     return Scaffold(
       backgroundColor: Styles.bgColor,
@@ -23,9 +68,47 @@ class SearchScreen extends StatelessWidget {
           Gap(AppLayout.getHeight(20)),
           const AppTicketTabs(firstTable: "Airline Tickets",secondTable: "Hotels"),
           Gap(AppLayout.getHeight(25)),
-          const AppIconText(icon: Icons.flight_takeoff_rounded, text: "Departure"),
+          TextField(
+            controller: fromController,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.flight_takeoff_rounded),
+              enabledBorder: OutlineInputBorder(
+                borderSide:
+                BorderSide(color: Colors.white), //<-- SEE HERE
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey.shade400),
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+                fillColor: Colors.white,
+                filled: true,
+                hintText: "Departure",
+                hintStyle: TextStyle(color: Colors.grey[500])
+
+            ),
+          ),
           Gap(AppLayout.getHeight(20)),
-          const AppIconText(icon: Icons.flight_land_rounded, text: "Arrival"),
+          TextField(
+            controller: toController,
+            decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.flight_land_rounded),
+                enabledBorder: OutlineInputBorder(
+                  borderSide:
+                  BorderSide(color: Colors.white), //<-- SEE HERE
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey.shade400),
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+                fillColor: Colors.white,
+                filled: true,
+                hintText: "Arrival",
+                hintStyle: TextStyle(color: Colors.grey[500])
+
+            ),
+          ),
           Gap(AppLayout.getHeight(25)),
           Container(
             padding: EdgeInsets.symmetric(
@@ -35,8 +118,11 @@ class SearchScreen extends StatelessWidget {
                 color: Color(0xff76b5c5),
                 borderRadius: BorderRadius.circular(AppLayout.getWidht(10))
             ),
-            child: Center(
-                child: Text("find tickets",style: Styles.textStyle.copyWith(color: Colors.white),)
+            child: InkWell(
+              onTap: ()=> findQuery(toController,fromController,context),
+              child: Center(
+                  child: Text("find tickets",style: Styles.textStyle.copyWith(color: Colors.white),)
+              ),
             ),
           ),
           Gap(AppLayout.getHeight(40)),

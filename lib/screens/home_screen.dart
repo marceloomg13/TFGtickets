@@ -75,7 +75,7 @@ class HomeScreen extends StatelessWidget {
             child: Container(
               height: 200,
               child: Row(
-                  children: ticketList.map((singleTicket) => TicketView(ticket: singleTicket)).toList(),
+                  children: myTickets.map((singleTicket) => TicketView(ticket: singleTicket)).toList(),
               ),
             )
           ),

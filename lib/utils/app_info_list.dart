@@ -67,5 +67,8 @@ List<Map<String, dynamic>> ticketList = [
     'date': "26 MAY",
     'departure_time':"09:00 AM",
     "number":31
-  },
+  }
+];
+
+List<Map<String, dynamic>> myTickets = [
 ];

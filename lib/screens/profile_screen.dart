@@ -2,6 +2,7 @@ import 'package:booktickets/utils/app_layout.dart';
 import 'package:booktickets/utils/app_styles.dart';
 import 'package:booktickets/widgets/Column_layout.dart';
 import 'package:booktickets/widgets/layout_builder_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluentui_icons/fluentui_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,10 @@ import 'package:gap/gap.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
+
+  void signOut(){
+    FirebaseAuth.instance.signOut();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +88,8 @@ class ProfileScreen extends StatelessWidget {
                       onTap: (){
                         print("tapped");
                       },
-                      child: Text("Edit",style: Styles.textStyle.copyWith(color: Styles.primaryColor,fontWeight: FontWeight.w300),))
+                      child: Text("Edit",style: Styles.textStyle.copyWith(color: Styles.primaryColor,fontWeight: FontWeight.w300),)),
+                  IconButton(onPressed: signOut, icon: const Icon(Icons.logout))
                 ],
               )
             ],
