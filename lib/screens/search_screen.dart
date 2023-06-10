@@ -23,9 +23,7 @@ class SearchScreen extends StatelessWidget {
   void findQuery(TextEditingController toController, TextEditingController fromController,context) async {
     var db = FirebaseFirestore.instance;
     int ticketIDNumber = 0;
-    for(var i = 0;i<=ticketList.length-1;i++){
-      print(ticketList[i]);
-    }
+
     db.collection("Vuelos").where("to.name", isEqualTo: toController.text).where("from.name", isEqualTo: fromController.text).get().then(
           (querySnapshot) {
         print("Successfully completed");

@@ -23,12 +23,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  addData() async{
+  initializeData() async{
     for(var element in hotelList){
-      FirebaseFirestore.instance.collection("Hoteles").add(element);
+      FirebaseFirestore.instance.collection("Hoteles").doc(element['id'].toString()).set(element);
     }
     for(var element in ticketList){
-      FirebaseFirestore.instance.collection("Vuelos").add(element);
+      FirebaseFirestore.instance.collection("Vuelos").doc(element['number'].toString()).set(element);
     }
     print("All data added");
   }
@@ -36,7 +36,12 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     myTickets.clear();
-    //addData();
+    FirebaseFirestore.instance.collection("MisVuelos").get().then((snapshot) => {
+    for (DocumentSnapshot ds in snapshot.docs){
+        ds.reference.delete(),
+    }});
+
+    initializeData();
   }
 
 
