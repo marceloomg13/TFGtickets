@@ -33,7 +33,7 @@ class flightPicker extends StatelessWidget {
 
         Map<String, dynamic> data = docSnapshot.data();
         Map<dynamic,dynamic> toData = data['to'];
-        Map<dynamic,dynamic> fromData = data['to'];
+        Map<dynamic,dynamic> fromData = data['from'];
         toCode = toData["code"].toString();
         toName = toData["name"].toString();
         fromCode = fromData["code"].toString();

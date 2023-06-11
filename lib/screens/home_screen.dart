@@ -14,10 +14,14 @@ import 'package:gap/gap.dart';
 import '../utils/app_info_list.dart';
 import 'flight_picker.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
 
+class _HomeScreenState extends State<HomeScreen> {
   void findQuery(TextEditingController searchController,context) async{
     var db = FirebaseFirestore.instance;
     int ticketIDNumber = 0;
@@ -38,8 +42,8 @@ class HomeScreen extends StatelessWidget {
                               ticketIDNumber = i;
                               print("TRUE" + "  " + ticketIDNumber.toString());
 
-                              showCupertinoModalPopup(context: context, builder:
-                                  (context) => flightViewer(ticketID: ticketIDNumber));
+                              //showCupertinoModalPopup(context: context, builder:
+                                //  (context) => flightViewer(ticketID: ticketIDNumber));
                             } else {
                               print("false");
                             }
@@ -58,8 +62,8 @@ class HomeScreen extends StatelessWidget {
                     ticketIDNumber = i;
                     print("TRUE" + "  " + ticketIDNumber.toString());
 
-                    showCupertinoModalPopup(context: context, builder:
-                        (context) => flightViewer(ticketID: ticketIDNumber));
+                    //showCupertinoModalPopup(context: context, builder:
+                      //  (context) => flightViewer(ticketID: ticketIDNumber));
                   } else {
                     print("false");
                   }
@@ -69,6 +73,11 @@ class HomeScreen extends StatelessWidget {
           },
       onError: (e) => print("Error completing: $e"),
     );
+  }
+
+  void viewAll(BuildContext context){
+    showCupertinoModalPopup(context: context, builder:
+        (context) => flightViewer());
   }
 
   @override
@@ -147,7 +156,15 @@ class HomeScreen extends StatelessWidget {
                 ),
 
                 const Gap(40),
-                AppDoubleTextWidget(bigText: "Upcoming Flights", smallText: "view all")
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("Upcoming Flights", style: Styles.headLineStyle2),
+                    InkWell(
+                        onTap: () => viewAll(context),
+                        child: Text("view all",style: Styles.textStyle.copyWith(color: Styles.primaryColor)))
+                  ],
+                )
               ],
             ),
           ),
@@ -182,8 +199,7 @@ class HomeScreen extends StatelessWidget {
 }
 
 class flightViewer extends StatelessWidget {
-  final int ticketID;
-  const flightViewer({Key? key,required this.ticketID}) : super(key: key);
+  const flightViewer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -196,16 +212,15 @@ class flightViewer extends StatelessWidget {
       BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child:
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
-              child: TicketView(ticket: ticketList[ticketID]),
+        SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: myTickets.map((singleTicket) => TicketView(ticket: singleTicket)).toList(),
+                ),
+              ),
             ),
-          ],
-        ),
-
-
       ),
     );
   }
