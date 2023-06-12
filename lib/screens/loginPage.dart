@@ -16,12 +16,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // text editing controllers
   final emailController = TextEditingController();
 
   final passwordController = TextEditingController();
 
-  // sign user in method
   void signUserIn() async {
     showDialog(
         context: context,
@@ -83,7 +81,6 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 const SizedBox(height: 50),
 
-                // logo
                 const Icon(
                   Icons.lock,
                   size: 100,
@@ -91,7 +88,6 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 50),
 
-                // welcome back, you've been missed!
                 Text(
                   'Welcome back you\'ve been missed!',
                   style: TextStyle(
@@ -102,7 +98,6 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 25),
 
-                // username textfield
                 MyTextField(
                   controller: emailController,
                   hintText: 'Email',
@@ -111,7 +106,6 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 10),
 
-                // password textfield
                 MyTextField(
                   controller: passwordController,
                   hintText: 'Password',
@@ -120,7 +114,6 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 10),
 
-                // forgot password?
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Row(
@@ -136,7 +129,6 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 25),
 
-                // sign in button
                 MyButton(
                   text: "Sign in",
                   onTap: signUserIn,
@@ -144,7 +136,6 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 35),
 
-                // or continue with
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Row(
@@ -174,7 +165,6 @@ class _LoginPageState extends State<LoginPage> {
 
                 const SizedBox(height: 25),
 
-                // not a member? register now
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

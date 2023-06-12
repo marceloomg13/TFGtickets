@@ -33,10 +33,8 @@ class SearchScreen extends StatelessWidget {
           for(var i = 0;i<=ticketList.length-1;i++){
             print("${data['number']}     ${ticketList[i]['number']}");
             if(data['number'].toString() == ticketList[i]['number'].toString()){
-
               ticketIDNumber = i;
               print("TRUE" + "  "+ticketIDNumber.toString());
-
               showCupertinoModalPopup(context: context, builder:
                   (context) => flightPicker(ticketID: ticketIDNumber));
             }else{

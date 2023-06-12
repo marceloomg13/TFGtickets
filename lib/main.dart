@@ -1,4 +1,6 @@
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:booktickets/screens/auth_page.dart';
+import 'package:booktickets/screens/splash.dart';
 import 'package:booktickets/utils/app_info_list.dart';
 import 'package:booktickets/utils/app_styles.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -92,9 +94,15 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: AuthPage(),
+      home: AnimatedSplashScreen(
+          splash: Splash(),
+          splashIconSize: double.infinity,
+          duration: 1500,
+          splashTransition: SplashTransition.fadeTransition,
+          backgroundColor: const Color(0xFF8ACCF7),
+          nextScreen: AuthPage())
     );
   }
 }

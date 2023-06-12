@@ -85,10 +85,9 @@ class TicketScreen extends StatelessWidget {
                   ],
                 ),
               ),
-            /*
-            bar code
-            */
-              Container(
+
+
+            Container(
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(

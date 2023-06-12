@@ -14,12 +14,10 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  // text editing controllers
   final emailController = TextEditingController();
 
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-  // sign user up method
   void signUserUp() async {
     showDialog(
         context: context,
@@ -84,7 +82,6 @@ class _RegisterPageState extends State<RegisterPage> {
               children: [
                 const SizedBox(height: 50),
 
-                // logo
                 const Icon(
                   Icons.lock,
                   size: 100,
@@ -92,9 +89,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 50),
 
-                // welcome back, you've been missed!
                 Text(
-                  'Let\'s create an account for you!',
+                  'Lets create an account for you!',
                   style: TextStyle(
                     color: Colors.grey[700],
                     fontSize: 16,
@@ -103,7 +99,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 25),
 
-                // username textfield
                 MyTextField(
                   controller: emailController,
                   hintText: 'Email',
@@ -112,7 +107,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 10),
 
-                // password textfield
                 MyTextField(
                   controller: passwordController,
                   hintText: 'Password',
@@ -129,7 +123,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 25),
 
-                // sign in button
                 MyButton(
                   text: "Sign Up",
                   onTap: signUserUp,
@@ -137,7 +130,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 35),
 
-                // or continue with
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Row(
@@ -167,7 +159,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
                 const SizedBox(height: 25),
 
-                // not a member? register now
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
