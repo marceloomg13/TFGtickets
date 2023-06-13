@@ -8,14 +8,14 @@ import 'package:gap/gap.dart';
 import '../utils/app_info_list.dart';
 
 class flightPicker extends StatelessWidget {
-  final int ticketID;
+  final List<dynamic> ticketID;
   const flightPicker({Key? key,required this.ticketID}) : super(key: key);
 
   Future<void> update(context) async{
-    final myTicketID = ticketList[ticketID]['number'];
-    print(myTickets);
-    print("selected" + ticketList[ticketID].toString());
-    FirebaseFirestore.instance.collection("MisVuelos").doc(myTicketID.toString()).set(ticketList[ticketID]);
+    for(var i in ticketID) {
+      final myTicketID = ticketList[i]['number'];
+      FirebaseFirestore.instance.collection("MisVuelos").doc(myTicketID.toString()).set(ticketList[i]);
+    }
     Navigator.pop(context, 'Yes');
 
     final MisVuelos = FirebaseFirestore.instance.collection("MisVuelos");
@@ -85,7 +85,8 @@ class flightPicker extends StatelessWidget {
                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Center(
-                    child: GestureDetector(
+                     child:
+                      GestureDetector(
                         onTap: () =>showDialog<String>(
                           context: context,
                           builder: (BuildContext context) => AlertDialog(
@@ -103,7 +104,16 @@ class flightPicker extends StatelessWidget {
                             ],
                           ),
                         ),
-                        child: TicketView(ticket: ticketList[ticketID])),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: temporalTickets.map((singleTicket) => TicketView(ticket: singleTicket)).toList(),
+                            ),
+                          ),
+                        ),
+                      ),
                   ),
                 ],
               ),

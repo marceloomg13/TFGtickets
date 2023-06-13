@@ -1,6 +1,8 @@
 import 'dart:ui';
 
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:booktickets/screens/hotel_screen.dart';
+import 'package:booktickets/screens/splash.dart';
 import 'package:booktickets/screens/ticket_view.dart';
 import 'package:booktickets/utils/app_styles.dart';
 import 'package:booktickets/widgets/double_text_widget.dart';
@@ -22,58 +24,76 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+
   void findQuery(TextEditingController searchController,context) async{
+    temporalTickets.clear();
     var db = FirebaseFirestore.instance;
-    int ticketIDNumber = 0;
+    var ticketIDNumber = [];
+    var querySize = 0;
     db.collection("MisVuelos").where('to.name', isEqualTo: searchController.text).get().then(
           (querySnapshot) {
-            print("Successfully completed");
+            print("query1");
             print(querySnapshot.size);
-            if (querySnapshot.size == 0) {
-              db.collection("MisVuelos").where('to.name', isEqualTo: searchController.text).get().then(
-                      (querySnapshot2) {
-                        for (var docSnapshot in querySnapshot2.docs) {
-                          print('${docSnapshot.id} => ${docSnapshot.data()}');
-                          Map<String, dynamic> data = docSnapshot.data();
-                          for (var i = 0; i <= ticketList.length - 1; i++) {
-                            print("${data['number']}------${ticketList[i]['number']}");
-                            if (data['number'].toString() ==
-                                ticketList[i]['number'].toString()) {
-                              ticketIDNumber = i;
-                              print("TRUE" + "  " + ticketIDNumber.toString());
-
-                              //showCupertinoModalPopup(context: context, builder:
-                                //  (context) => flightViewer(ticketID: ticketIDNumber));
-                            } else {
-                              print("false");
-                            }
-                          }
-                        }
-                  }
-              );
-            } else {
+            querySize = querySnapshot.size;
               for (var docSnapshot in querySnapshot.docs) {
                 print('${docSnapshot.id} => ${docSnapshot.data()}');
                 Map<String, dynamic> data = docSnapshot.data();
                 for (var i = 0; i <= ticketList.length - 1; i++) {
                   print("${data['number']}     ${ticketList[i]['number']}");
-                  if (data['number'].toString() ==
-                      ticketList[i]['number'].toString()) {
-                    ticketIDNumber = i;
+                  if (data['number'].toString() == ticketList[i]['number'].toString()) {
+                    ticketIDNumber.add(i);
                     print("TRUE" + "  " + ticketIDNumber.toString());
-
-                    //showCupertinoModalPopup(context: context, builder:
-                      //  (context) => flightViewer(ticketID: ticketIDNumber));
                   } else {
                     print("false");
                   }
                 }
               }
+
+            for(var i in ticketIDNumber) {
+              temporalTickets.add(ticketList[i]);
+              print(temporalTickets.toString());
+              print("snap");
             }
+            print(ticketIDNumber);
           },
       onError: (e) => print("Error completing: $e"),
     );
+    if (querySize == 0) {
+      db.collection("MisVuelos").where('from.name', isEqualTo: searchController.text).get().then(
+              (querySnapshot2) {
+                print(querySnapshot2.size);
+            for (var docSnapshot in querySnapshot2.docs) {
+              print('${docSnapshot.id} => ${docSnapshot.data()}');
+              Map<String, dynamic> data = docSnapshot.data();
+              for (var i = 0; i <= ticketList.length - 1; i++) {
+                print("${data['number']}------${ticketList[i]['number']}");
+                if (data['number'].toString() ==
+                    ticketList[i]['number'].toString()) {
+                  ticketIDNumber.add(i);
+                  print("TRUE" + "  " + ticketIDNumber.toString());
+                } else {
+                  print("false");
+                }
+              }
+            }
+            for(var i in ticketIDNumber) {
+              temporalTickets.add(ticketList[i]);
+              print(temporalTickets.toString());
+              print("snap2");
+            }
+          }
+      );
+    }
+    showCupertinoModalPopup(context: context, builder:
+        (context) => AnimatedSplashScreen(
+            splash: SplashBlur(),
+            splashIconSize: double.infinity,
+            duration: 1500,
+            splashTransition: SplashTransition.fadeTransition,
+            nextScreen: flightViewer()));
   }
+
 
   void viewAll(BuildContext context){
     showCupertinoModalPopup(context: context, builder:
@@ -217,7 +237,7 @@ class flightViewer extends StatelessWidget {
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: myTickets.map((singleTicket) => TicketView(ticket: singleTicket)).toList(),
+                  children: temporalTickets.map((singleTicket) => TicketView(ticket: singleTicket)).toList(),
                 ),
               ),
             ),
@@ -225,5 +245,53 @@ class flightViewer extends StatelessWidget {
     );
   }
 }
+class SplashBlur extends StatelessWidget {
+  const SplashBlur({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: Container(
+          width: double.infinity,
+          height:  double.infinity,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Container(
+                  height: 50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                      color:  const Color(0xFFeeedf2),
+                      borderRadius: BorderRadius.circular(25),
+                      image: const DecorationImage(
+                          fit: BoxFit.fitHeight,
+                          image: AssetImage("assets/images/flight_icon.png")
+                      )
+                  ),
+                ),
+                Gap(5),
+                Text("BookTickets",style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),),
+                Gap(5),
+                Text("App development",style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                ),)
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 
 

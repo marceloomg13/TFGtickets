@@ -25,23 +25,40 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  initializeData() async{
-    /*
-    myTickets.clear();
-    FirebaseFirestore.instance.collection("MisVuelos").get().then((snapshot) => {
-      for (DocumentSnapshot ds in snapshot.docs){
-        ds.reference.delete(),
-      }});
 
-     */
-    for(var element in hotelList){
-      FirebaseFirestore.instance.collection("Hoteles").doc(element['id'].toString()).set(element);
-    }
-    for(var element in ticketList){
-      FirebaseFirestore.instance.collection("Vuelos").doc(element['number'].toString()).set(element);
-    }
-    final MisVuelos = FirebaseFirestore.instance.collection("MisVuelos");
-    MisVuelos.get().then((querySnapshot){
+  initializeData() async{
+    var db = FirebaseFirestore.instance;
+    var vuelo = {
+      'from': {
+        'code':"MD",
+        'name':"Madrid"
+      },
+      'to': {
+        'code':"BC",
+        'name':"Barcelona"
+      },
+      'flying_time': "45M",
+      'date': "26 MAY",
+      'departure_time':"12:00 AM",
+      "number":13
+    };
+    db.collection("Vuelos").doc("13").set(vuelo);
+
+    queryHotels();
+    queryTickets("MisVuelos");
+    queryTickets("Vuelos");
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initializeData();
+  }
+
+  void queryTickets(String collection){
+    final collectionQuery = FirebaseFirestore.instance.collection(collection);
+
+    collectionQuery.get().then((querySnapshot){
       for (var docSnapshot in querySnapshot.docs) {
         var fromCode;
         var fromName;
@@ -78,17 +95,44 @@ class _MyAppState extends State<MyApp> {
           'departure_time':departureTime,
           "number":number
         };
-        print(billete);
+        if(collection == 'MisVuelos'){
         myTickets.add(billete);
+        }
+        if(collection == 'Vuelos'){
+          ticketList.add(billete);
+        }
       }
-      FirebaseFirestore.instance.terminate();
-      print(myTickets);
     });
   }
-  @override
-  void initState() {
-    super.initState();
-    initializeData();
+
+  void queryHotels(){
+    final collectionQuery = FirebaseFirestore.instance.collection("Hoteles");
+
+    collectionQuery.get().then((querySnapshot){
+      for (var docSnapshot in querySnapshot.docs) {
+        var destination;
+        var id;
+        var image;
+        var place;
+        var price;
+
+        Map<String, dynamic> data = docSnapshot.data();
+        destination = data["destination"].toString();
+        id = data["id"].toString();
+        image = data["image"].toString();
+        place = data["place"].toString();
+        price = data["price"];
+
+        var Hotel = {
+          'id':id,
+          'image': image,
+          'place': place,
+          'destination': destination,
+          'price': price
+        };
+        hotelList.add(Hotel);
+      }
+    });
   }
 
 

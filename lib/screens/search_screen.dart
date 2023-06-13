@@ -21,10 +21,12 @@ class SearchScreen extends StatelessWidget {
 
 
   void findQuery(TextEditingController toController, TextEditingController fromController,context) async {
+    temporalTickets.clear();
     var db = FirebaseFirestore.instance;
-    int ticketIDNumber = 0;
-
-    db.collection("Vuelos").where("to.name", isEqualTo: toController.text).where("from.name", isEqualTo: fromController.text).get().then(
+    var ticketIDNumber =[];
+    db.collection("Vuelos").
+    where("to.name", isEqualTo: toController.text).
+    where("from.name", isEqualTo: fromController.text).get().then(
           (querySnapshot) {
         print("Successfully completed");
         for (var docSnapshot in querySnapshot.docs) {
@@ -33,15 +35,20 @@ class SearchScreen extends StatelessWidget {
           for(var i = 0;i<=ticketList.length-1;i++){
             print("${data['number']}     ${ticketList[i]['number']}");
             if(data['number'].toString() == ticketList[i]['number'].toString()){
-              ticketIDNumber = i;
+              ticketIDNumber.add(i);
               print("TRUE" + "  "+ticketIDNumber.toString());
-              showCupertinoModalPopup(context: context, builder:
-                  (context) => flightPicker(ticketID: ticketIDNumber));
             }else{
               print("false");
             }
           }
         }
+        for(var i in ticketIDNumber) {
+          print(ticketList[i]);
+          temporalTickets.add(ticketList[i]);
+          print(temporalTickets.toString());
+        }
+        showCupertinoModalPopup(context: context, builder:
+            (context) => flightPicker(ticketID: ticketIDNumber));
       },
       onError: (e) => print("Error completing: $e"),
     );
