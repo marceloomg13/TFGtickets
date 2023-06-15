@@ -14,11 +14,11 @@ class HotelScren extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 17),
       margin: const EdgeInsets.only(top: 5,right: 17),
-      width: size.width*0.6,
-      height: 350,
+      width: size.width * 0.9,
+      height: 250,
       decoration: BoxDecoration(
         color: Color(0xff76b5c5),
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.shade200,
@@ -27,16 +27,17 @@ class HotelScren extends StatelessWidget {
           )
         ]
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
-            height: 180,
+            width: 200,
+            height: 50,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               color: Styles.bgColor,
               image: DecorationImage(
-                fit: BoxFit.cover,
+                fit: BoxFit.fill,
                 image: AssetImage(
                   "assets/images/${hotel['image']}"
                 )
@@ -44,20 +45,26 @@ class HotelScren extends StatelessWidget {
             ),
           ),
           const Gap(15),
-          Text(
-            hotel['place'],
-            style: Styles.headLineStyle2.copyWith(color: Styles.kakicolor),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                hotel['place'],
+                style: Styles.headLineStyle2.copyWith(color: Styles.kakicolor,fontSize: 18),
+              ),
+              const Gap(5),
+              Text(
+                hotel['destination'],
+                style: Styles.headLineStyle3.copyWith(color: Colors.white,fontSize: 16),
+              ),
+              const Gap(8),
+              Text(
+                '\$${hotel['price']}/night',
+                style: Styles.headLineStyle1.copyWith(color: Styles.kakicolor,fontSize: 15),
+              )
+            ],
           ),
-          const Gap(5),
-          Text(
-            hotel['destination'],
-            style: Styles.headLineStyle3.copyWith(color: Colors.white),
-          ),
-          const Gap(8),
-          Text(
-            '\$${hotel['price']}/night',
-            style: Styles.headLineStyle1.copyWith(color: Styles.kakicolor),
-          )
         ],
       ),
     );

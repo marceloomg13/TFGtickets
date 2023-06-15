@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:booktickets/screens/hotel_card.dart';
 import 'package:booktickets/screens/hotel_screen.dart';
 import 'package:booktickets/screens/splash.dart';
 import 'package:booktickets/screens/ticket_view.dart';
@@ -33,27 +34,19 @@ class _HomeScreenState extends State<HomeScreen> {
     var querySize = 0;
     db.collection("MisVuelos").where('to.name', isEqualTo: searchController.text).get().then(
           (querySnapshot) {
-            print("query1");
-            print(querySnapshot.size);
             querySize = querySnapshot.size;
               for (var docSnapshot in querySnapshot.docs) {
-                print('${docSnapshot.id} => ${docSnapshot.data()}');
                 Map<String, dynamic> data = docSnapshot.data();
                 for (var i = 0; i <= ticketList.length - 1; i++) {
-                  print("${data['number']}     ${ticketList[i]['number']}");
                   if (data['number'].toString() == ticketList[i]['number'].toString()) {
                     ticketIDNumber.add(i);
-                    print("TRUE" + "  " + ticketIDNumber.toString());
                   } else {
                     print("false");
                   }
                 }
               }
-
             for(var i in ticketIDNumber) {
               temporalTickets.add(ticketList[i]);
-              print(temporalTickets.toString());
-              print("snap");
             }
             print(ticketIDNumber);
           },
@@ -62,16 +55,12 @@ class _HomeScreenState extends State<HomeScreen> {
     if (querySize == 0) {
       db.collection("MisVuelos").where('from.name', isEqualTo: searchController.text).get().then(
               (querySnapshot2) {
-                print(querySnapshot2.size);
             for (var docSnapshot in querySnapshot2.docs) {
-              print('${docSnapshot.id} => ${docSnapshot.data()}');
               Map<String, dynamic> data = docSnapshot.data();
               for (var i = 0; i <= ticketList.length - 1; i++) {
-                print("${data['number']}------${ticketList[i]['number']}");
                 if (data['number'].toString() ==
                     ticketList[i]['number'].toString()) {
                   ticketIDNumber.add(i);
-                  print("TRUE" + "  " + ticketIDNumber.toString());
                 } else {
                   print("false");
                 }
@@ -79,8 +68,6 @@ class _HomeScreenState extends State<HomeScreen> {
             }
             for(var i in ticketIDNumber) {
               temporalTickets.add(ticketList[i]);
-              print(temporalTickets.toString());
-              print("snap2");
             }
           }
       );
@@ -89,15 +76,15 @@ class _HomeScreenState extends State<HomeScreen> {
         (context) => AnimatedSplashScreen(
             splash: SplashBlur(),
             splashIconSize: double.infinity,
-            duration: 1500,
+            duration: 500,
             splashTransition: SplashTransition.fadeTransition,
-            nextScreen: flightViewer()));
+            nextScreen: TemporalViewer()));
   }
 
 
   void viewAll(BuildContext context){
     showCupertinoModalPopup(context: context, builder:
-        (context) => flightViewer());
+        (context) => MyTicketsViewer());
   }
 
   @override
@@ -176,14 +163,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
 
                 const Gap(40),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Upcoming Flights", style: Styles.headLineStyle2),
-                    InkWell(
-                        onTap: () => viewAll(context),
-                        child: Text("view all",style: Styles.textStyle.copyWith(color: Styles.primaryColor)))
-                  ],
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Upcoming Flights", style: Styles.headLineStyle2),
+                      InkWell(
+                          onTap: () => viewAll(context),
+                          child: Text("view all",style: Styles.textStyle.copyWith(color: Styles.primaryColor)))
+                    ],
+                  ),
                 )
               ],
             ),
@@ -206,10 +197,10 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Gap(15),
           SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
+              scrollDirection: Axis.vertical,
               padding: const EdgeInsets.only(left: 20),
-              child: Row(
-                children: hotelList.map((singleHotel) => HotelScren(hotel: singleHotel)).toList(),
+              child: Column(
+                children: hotelList.map((singleHotel) => HotelCard(hotel: singleHotel)).toList(),
               )
           )
         ],
@@ -217,9 +208,38 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+class MyTicketsViewer extends StatelessWidget {
 
-class flightViewer extends StatelessWidget {
-  const flightViewer({Key? key}) : super(key: key);
+  const MyTicketsViewer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+      ),
+      backgroundColor: Colors.transparent,
+      body:
+      BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child:
+        SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: myTickets.map((singleTicket) => TicketView(ticket: singleTicket)).toList(),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class TemporalViewer extends StatelessWidget {
+
+  const TemporalViewer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

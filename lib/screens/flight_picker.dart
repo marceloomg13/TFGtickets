@@ -66,7 +66,6 @@ class flightPicker extends StatelessWidget {
           myTickets.add(billete);
         }
       }
-      print(myTickets);
     });
   }
 

@@ -115,6 +115,8 @@ class _MyAppState extends State<MyApp> {
         var image;
         var place;
         var price;
+        var rating;
+        var reviews;
 
         Map<String, dynamic> data = docSnapshot.data();
         destination = data["destination"].toString();
@@ -122,13 +124,17 @@ class _MyAppState extends State<MyApp> {
         image = data["image"].toString();
         place = data["place"].toString();
         price = data["price"];
+        rating = data["rating"];
+        reviews = data["reviews"];
 
         var Hotel = {
           'id':id,
           'image': image,
           'place': place,
           'destination': destination,
-          'price': price
+          'price': price,
+          'rating' : rating,
+          'reviews' : reviews
         };
         hotelList.add(Hotel);
       }

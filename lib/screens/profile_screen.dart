@@ -33,7 +33,7 @@ class ProfileScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(AppLayout.getHeight(10)),
                   image: const DecorationImage(
                     image: AssetImage(
-                      "assets/images/img_1.png"
+                      "assets/images/flight_icon.png"
                     )
                   )
                 ),
