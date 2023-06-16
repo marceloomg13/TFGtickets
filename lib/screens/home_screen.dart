@@ -82,9 +82,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
 
-  void viewAll(BuildContext context){
+  void viewAllFlights(BuildContext context){
     showCupertinoModalPopup(context: context, builder:
         (context) => MyTicketsViewer());
+  }
+  void viewAllHotels(BuildContext context){
+    showCupertinoModalPopup(context: context, builder:
+        (context) => MyHotelsViewer());
   }
 
   @override
@@ -171,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Text("Upcoming Flights", style: Styles.headLineStyle2),
                       InkWell(
-                          onTap: () => viewAll(context),
+                          onTap: () => viewAllFlights(context),
                           child: Text("view all",style: Styles.textStyle.copyWith(color: Styles.primaryColor)))
                     ],
                   ),
@@ -193,7 +197,16 @@ class _HomeScreenState extends State<HomeScreen> {
           const Gap(15),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: AppDoubleTextWidget(bigText: "Hotels",smallText: "view all",),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Hotels", style: Styles.headLineStyle2),
+                InkWell(
+                    onTap: () => viewAllHotels(context),
+                    child: Text("view all",style: Styles.textStyle.copyWith(color: Styles.primaryColor)))
+              ],
+            ),
           ),
           Gap(15),
           SingleChildScrollView(
@@ -204,6 +217,35 @@ class _HomeScreenState extends State<HomeScreen> {
               )
           )
         ],
+      ),
+    );
+  }
+}
+
+class MyHotelsViewer extends StatelessWidget {
+
+  const MyHotelsViewer({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+      ),
+      backgroundColor: Colors.transparent,
+      body:
+      BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child:
+        SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: hotelList.map((singleHotel) => HotelCard(hotel: singleHotel)).toList(),
+            ),
+          ),
+        ),
       ),
     );
   }

@@ -124,7 +124,7 @@ class SearchScreen extends StatelessWidget {
             ),
           ),
           Gap(AppLayout.getHeight(40)),
-          const AppDoubleTextWidget(bigText: "Hotel reviews",smallText: "view all",),
+          const AppDoubleTextWidget(bigText: "Hotel reviews",smallText: "",),
           Gap(AppLayout.getHeight(15)),
           /////////////////////////////
           SingleChildScrollView(
